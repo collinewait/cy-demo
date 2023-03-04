@@ -6,7 +6,7 @@ on:
 
 jobs:
   cypress-tests:
-    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/e2e') }}
+    if: ${{ github.event.issue.pull_request }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -26,6 +26,7 @@ jobs:
           node app.js &
 
       - name: Cypress run
+        if: contains(github.event.comment.body, '/e2e')
         uses: cypress-io/github-action@v5
         with:
           working-directory: ./frontend
