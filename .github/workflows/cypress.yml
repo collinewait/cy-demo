@@ -1,13 +1,12 @@
 name: Cypress Tests
 
 on:
-  push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
+  issue_comment:
+    types: [created, edited]
 
 jobs:
   cypress-tests:
+    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/e2e') }}
     runs-on: ubuntu-latest
     defaults:
       run:
