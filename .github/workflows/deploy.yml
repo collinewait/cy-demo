@@ -1,0 +1,17 @@
+name: Deploy Release (Requires Approval)
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - name: Simulate Deployment
+        run: |
+          echo "Deploying release ${{ github.event.release.tag_name }}"
+          echo "Running fake deployment steps..."
+          echo "Deployment complete!"
