@@ -6,7 +6,7 @@ on:
       - "v*.*.*"
 
 permissions:
-  contents: read   # minimal for generating changelog
+  contents: write   # minimal permission for creating GitHub release
 
 jobs:
   create-release:
