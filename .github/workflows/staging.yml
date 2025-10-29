@@ -5,6 +5,10 @@ on:
     branches:
       - dev
 
+permissions:
+  contents: read         # minimal permission for checkout
+  deployments: write     # needed if you were doing real deployments
+
 jobs:
   deploy-staging:
     runs-on: ubuntu-latest
