@@ -4,6 +4,11 @@ on:
   release:
     types: [published]
 
+
+permissions:
+  contents: read         # minimal permission for checkout
+  deployments: write     # needed if you were doing real deployments
+
 jobs:
   deploy:
     runs-on: ubuntu-latest

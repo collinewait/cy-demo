@@ -1,0 +1,29 @@
+name: Deploy to Staging (on Merge to dev)
+
+on:
+  push:
+    branches:
+      - dev
+
+permissions:
+  contents: read         # minimal permission for checkout
+  deployments: write     # needed if you were doing real deployments
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log Deployment Start
+        run: echo "🚀 Detected merge to dev — deploying to staging environment..."
+
+      - name: Simulate Build
+        run: echo "🏗️ Building project for staging..."
+
+      - name: Simulate Tests
+        run: echo "Running post-merge tests on staging..."
+
+      - name: Simulate Deployment
+        run: echo "Deployment to staging complete!"
