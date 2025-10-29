@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: read   # minimal for generating changelog
-  releases: write  # needed for creating GitHub release
 
 jobs:
   create-release:
