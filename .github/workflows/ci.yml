@@ -1,0 +1,20 @@
+name: CI - Pull Request Checks
+
+on:
+  pull_request:
+    branches: [dev]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log build start
+        run: echo "🔨 Running dummy CI for PR into dev..."
+
+      - name: Run tests
+        run: echo "All dummy tests passed!"
+
+      - name: Build complete
+        run: echo "CI checks passed for branch ${{ github.head_ref }}"

@@ -1,0 +1,23 @@
+name: Release on Tag
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate Changelog
+        run: |
+          echo "Generating changelog for $GITHUB_REF..."
+          echo "Changes in this release:" > changelog.txt
+          git log -1 --pretty=format:"- %s" >> changelog.txt
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: changelog.txt
