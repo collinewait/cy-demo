@@ -1,12 +1,12 @@
 name: Deploy Release (Requires Approval)
 
-on:
-  release:
-    types: [published]
 # on:
-#   push:
-#     tags:
-#       - 'v*.*.*'   # triggers when a tag is pushed
+#   release:
+#     types: [published]
+on:
+  push:
+    tags:
+      - 'v*.*.*'   # triggers when a tag is pushed
 
 
 permissions:
