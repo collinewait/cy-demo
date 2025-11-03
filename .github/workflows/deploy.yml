@@ -1,4 +1,4 @@
-name: Deploy Release (Requires Approval)
+name: Deploy (Release or Hotfix)
 
 # on:
 #   release:
@@ -16,12 +16,74 @@ permissions:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted   # use your self-hosted runner
     environment: ${{ startsWith(github.ref_name, 'v') && 'production' || '' }}
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Simulate Deployment
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Show environment info
         run: |
-          echo "Deploying release ${{ github.event.release.tag_name }}"
-          echo "Running fake deployment steps..."
-          echo "Deployment complete!"
+          echo "Running on self-hosted runner: $(hostname)"
+          echo "Tag: $GITHUB_REF_NAME"
+
+      # Create a temporary folder for this release
+      - name: Prepare deploy folder
+        run: |
+          mkdir -p releases
+          echo "Prepared releases and deployed folders"
+
+      # Download the ZIP archive of the tagged release from GitHub
+      - name: Download release ZIP
+        run: |
+          RELEASE_TAG=${GITHUB_REF_NAME}
+          ZIP_PATH="releases/${RELEASE_TAG}.zip"
+          echo "Downloading release ZIP for ${RELEASE_TAG}"
+          curl -L \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -o "${ZIP_PATH}" \
+            "https://api.github.com/repos/${{ github.repository }}/zipball/${RELEASE_TAG}"
+          echo "Release ZIP saved to ${ZIP_PATH}"
+
+      # Simulate deployment
+      - name: Simulate deployment
+        run: |
+          RELEASE_TAG=${GITHUB_REF_NAME}
+          SRC="releases/${RELEASE_TAG}.zip"
+          
+          # Simulate server paths
+          DEPLOY_DIR="deployed/live"       # live folder on server
+          TMP_DIR="deployed/deploy_tmp"    # temporary unzip folder
+          TMP_ZIP="deployed/tmp_${RELEASE_TAG}.zip"  # temp zip location on server
+
+          echo "Starting deployment simulation for ${RELEASE_TAG}..."
+
+          # 1. Copy ZIP to server (simulate)
+          cp "${SRC}" "${TMP_ZIP}"
+          echo "Copied ZIP to ${TMP_ZIP}"
+
+          # 2. Clean up any previous temporary folder
+          rm -rf "${TMP_DIR}"
+          mkdir -p "${TMP_DIR}"
+          echo "Cleaned temporary folder ${TMP_DIR}"
+
+          # 3. Unzip into temporary folder
+          unzip -q "${TMP_ZIP}" -d "${TMP_DIR}"
+          echo "Unzipped release to temporary folder"
+
+          # 4. Atomically replace live code
+          rm -rf "${DEPLOY_DIR}"/*
+          mv "${TMP_DIR}"/* "${DEPLOY_DIR}/"
+          echo "Live code in ${DEPLOY_DIR} updated"
+
+          # 5. Remove temporary ZIP
+          rm -f "${TMP_ZIP}"
+          echo "Temporary ZIP removed"
+
+          # 6. Clean up temporary folder (leftovers)
+          rm -rf "${TMP_DIR}"
+          echo "Temporary folder cleaned"
+
+          echo "Release ${RELEASE_TAG} deployed successfully (atomic, clean)"
