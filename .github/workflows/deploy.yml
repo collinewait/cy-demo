@@ -27,18 +27,21 @@ jobs:
         run: |
           echo "Running on self-hosted runner: $(hostname)"
           echo "Tag: $GITHUB_REF_NAME"
-
+          
       # Create a temporary folder for this release
       - name: Prepare deploy folder
         run: |
-          mkdir -p releases
+          RUNNER_ROOT="/home/${USER}"
+          mkdir -p "${RUNNER_ROOT}/releases"
+          mkdir -p "${RUNNER_ROOT}/deployed"
           echo "Prepared releases and deployed folders"
 
       # Download the ZIP archive of the tagged release from GitHub
       - name: Download release ZIP
         run: |
+          RUNNER_ROOT="/home/${USER}"
           RELEASE_TAG=${GITHUB_REF_NAME}
-          ZIP_PATH="releases/${RELEASE_TAG}.zip"
+          ZIP_PATH="${RUNNER_ROOT}/releases/${RELEASE_TAG}.zip"
           echo "Downloading release ZIP for ${RELEASE_TAG}"
           curl -L \
             -H "Accept: application/vnd.github+json" \
@@ -50,13 +53,14 @@ jobs:
       # Simulate deployment
       - name: Simulate deployment
         run: |
+          RUNNER_ROOT="/home/${USER}"
           RELEASE_TAG=${GITHUB_REF_NAME}
-          SRC="releases/${RELEASE_TAG}.zip"
+          SRC="${RUNNER_ROOT}/releases/${RELEASE_TAG}.zip"
           
           # Simulate server paths
-          DEPLOY_DIR="deployed/live"       # live folder on server
-          TMP_DIR="deployed/deploy_tmp"    # temporary unzip folder
-          TMP_ZIP="deployed/tmp_${RELEASE_TAG}.zip"  # temp zip location on server
+          DEPLOY_DIR="${RUNNER_ROOT}/deployed/live"       # live folder on server
+          TMP_DIR="${RUNNER_ROOT}/deployed/deploy_tmp"    # temporary unzip folder
+          TMP_ZIP="${RUNNER_ROOT}/deployed/tmp_${RELEASE_TAG}.zip"  # temp zip location on server
 
           echo "Starting deployment simulation for ${RELEASE_TAG}..."
 
