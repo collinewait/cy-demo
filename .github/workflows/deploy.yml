@@ -31,7 +31,7 @@ jobs:
       # Create a temporary folder for this release
       - name: Prepare deploy folder
         run: |
-          RUNNER_ROOT="/home/${USER}"
+          RUNNER_ROOT="/Users/collinewaitire/Downloads/certs/actions-runner"
           mkdir -p "${RUNNER_ROOT}/releases"
           mkdir -p "${RUNNER_ROOT}/deployed"
           echo "Prepared releases and deployed folders"
@@ -39,7 +39,7 @@ jobs:
       # Download the ZIP archive of the tagged release from GitHub
       - name: Download release ZIP
         run: |
-          RUNNER_ROOT="/home/${USER}"
+          RUNNER_ROOT="/Users/collinewaitire/Downloads/certs/actions-runner"
           RELEASE_TAG=${GITHUB_REF_NAME}
           ZIP_PATH="${RUNNER_ROOT}/releases/${RELEASE_TAG}.zip"
           echo "Downloading release ZIP for ${RELEASE_TAG}"
@@ -53,7 +53,7 @@ jobs:
       # Simulate deployment
       - name: Simulate deployment
         run: |
-          RUNNER_ROOT="/home/${USER}"
+          RUNNER_ROOT="/Users/collinewaitire/Downloads/certs/actions-runner"
           RELEASE_TAG=${GITHUB_REF_NAME}
           SRC="${RUNNER_ROOT}/releases/${RELEASE_TAG}.zip"
           
