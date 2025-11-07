@@ -90,4 +90,8 @@ jobs:
           rm -rf "${TMP_DIR}"
           echo "Temporary folder cleaned"
 
+          # 7. Clean up release ZIP (from releases/)
+          rm -f "${SRC}"
+          echo "Release ZIP ${SRC} cleaned up"
+
           echo "Release ${RELEASE_TAG} deployed successfully (atomic, clean)"
