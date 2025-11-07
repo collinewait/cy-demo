@@ -79,7 +79,7 @@ jobs:
 
           # 4. Atomically replace live code
           rm -rf "${DEPLOY_DIR}"/*
-          mv "${TMP_DIR}"/* "${DEPLOY_DIR}/"
+          mv "${TMP_DIR}"/collinewait-cy-demo-* "${DEPLOY_DIR}/cy-demo"
           echo "Live code in ${DEPLOY_DIR} updated"
 
           # 5. Remove temporary ZIP
@@ -89,5 +89,9 @@ jobs:
           # 6. Clean up temporary folder (leftovers)
           rm -rf "${TMP_DIR}"
           echo "Temporary folder cleaned"
+
+          # 7. Clean up release ZIP (from releases/)
+          rm -f "${SRC}"
+          echo "Release ZIP ${SRC} cleaned up"
 
           echo "Release ${RELEASE_TAG} deployed successfully (atomic, clean)"
